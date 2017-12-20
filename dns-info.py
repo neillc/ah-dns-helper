@@ -52,11 +52,11 @@ class QueryObject(object):
         self.scheme = None
 
         self.convert_query_string_to_host()
-        self.get_NS()
-        self.get_MX()
-        self.get_A()
-        self.get_AAAA()
-        self.get_PTR()
+        self.get_NS_records()
+        self.get_MX_records()
+        self.get_A_records()
+        self.get_AAAA_records()
+        self.get_PTR_records()
 
     def __repr__(self):
         result = self.repr_query_string()
@@ -129,6 +129,10 @@ class QueryObject(object):
         else:
             self.hostname = url.path
 
+        self.find_domain()
+        self.get_NS_records()
+
+    def find_domain(self):
         try:
             answer = dns.resolver.query(self.hostname, 'NS')
             if answer:
@@ -144,22 +148,22 @@ class QueryObject(object):
                 )
                 if answer:
                     self.domain = parent
+            except ValueError:
+                pass
 
-        self.get_NS()
-
-    def get_NS(self):
+    def get_NS_records(self):
         self.nameservers = dns.resolver.query(self.domain, 'NS')
 
-    def get_MX(self):
+    def get_MX_records(self):
         pass
 
-    def get_A(self):
+    def get_A_records(self):
         pass
 
-    def get_AAAA(self):
+    def get_AAAA_records(self):
         pass
 
-    def get_PTR(self):
+    def get_PTR_records(self):
         pass
 
     def get_details_as_text(self):
