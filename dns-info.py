@@ -59,6 +59,25 @@ class QueryObject(object):
         self.get_PTR()
 
     def __repr__(self):
+        result = self.repr_query_string()
+
+        result += '\n\n'
+
+        result += (
+            '  query_string: {query}\n'
+            '  domain: {domain}\n'
+            '  hostname: {hostname}'.format(
+                query=self.query_string,
+                domain=self.domain,
+                hostname=self.hostname
+            )
+        )
+
+        result += self.repr_nameservers()
+
+        return result
+
+    def repr_query_string(self):
         result = 'You asked about %s\n\n' % self.query_string
 
         if self.domain == self.query_string:
@@ -81,22 +100,6 @@ class QueryObject(object):
                     break_on_hyphens=False
                 )
             )
-
-        result += '\n\n'
-
-        result += (
-            '  query_string: {query}\n'
-            '  domain: {domain}\n'
-            '  hostname: {hostname}'.format(
-                query=self.query_string,
-                domain=self.domain,
-                hostname=self.hostname
-            )
-        )
-
-        result += self.repr_nameservers()
-
-        return result
 
     def repr_nameservers(self):
         result = '\n  Nameservers:\n'
