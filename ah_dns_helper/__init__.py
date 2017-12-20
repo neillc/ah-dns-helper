@@ -82,12 +82,6 @@ class QueryObject(object):
 
         if self.domain == self.query_string:
             result += 'That is actually a domain. Well done!\n\n'
-        elif self.domain == self.hostname:
-            result += (
-                'That\'s actually a hostname rather than a domain. '
-                'As far as I can tell the domain that matches '
-                'is {0}\n'.format(self.hostname)
-            )
         elif self.scheme is not None:
             result += '\n'.join(
                 textwrap.wrap(
@@ -99,6 +93,12 @@ class QueryObject(object):
                     ),
                     break_on_hyphens=False
                 )
+            )
+        elif self.domain == self.hostname:
+            result += (
+                'That\'s actually a hostname rather than a domain. '
+                'As far as I can tell the domain that matches '
+                'is {0}\n'.format(self.hostname)
             )
 
         return result
