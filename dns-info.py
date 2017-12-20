@@ -84,6 +84,22 @@ class QueryObject(object):
 
         result += '\n\n'
 
+        result += (
+            '  query_string: {query}\n'
+            '  domain: {domain}\n'
+            '  hostname: {hostname}'.format(
+                query=self.query_string,
+                domain=self.domain,
+                hostname=self.hostname
+            )
+        )
+
+        result += self.repr_nameservers()
+
+        return result
+
+    def repr_nameservers(self):
+        result = '\n  Nameservers:\n'
         if self.nameservers:
             if self.nameservers[0].to_text().endswith('googledomains.com.'):
                 result += (
@@ -96,24 +112,8 @@ class QueryObject(object):
                     'Ace Hosting\'s DNS\n'
                 )
 
-        result += '\n\nDetails:\n'
-
-        result += (
-            '  query_string: {query}\n'
-            '  domain: {domain}\n'
-            '  hostname: {hostname}'.format(
-                query=self.query_string,
-                domain=self.domain,
-                hostname=self.hostname
-            )
-        )
-
-        result += '\n  Nameservers:\n'
-
         for ns in self.nameservers:
             result += '    ' + ns.to_text() + '\n'
-
-        return result
 
     def convert_query_string_to_host(self):
         url = urlparse(self.query_string)
@@ -127,7 +127,6 @@ class QueryObject(object):
             self.hostname = url.path
 
         try:
-            import pdb;pdb.set_trace()
             answer = dns.resolver.query(self.hostname, 'NS')
             if answer:
                 self.domain = self.hostname
