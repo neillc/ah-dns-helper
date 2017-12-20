@@ -2,3 +2,4 @@ ah_dns_helper.egg-info/
 build/
 dist/
 ah_dns_helper/__pycache__/
+.cache/
