@@ -23,7 +23,7 @@ setup(
     description='A simple helper script to get dns info about a domain.',
     long_description=long_description,
     url='https://github.com/neillc/ah-dns-helper',
-    author='Neill Cox'
+    author='Neill Cox',
     author_email='neill.cox@ingenious.com.au',
     classifiers=[
         'Development Status :: 3 - Alpha',
