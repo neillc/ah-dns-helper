@@ -52,11 +52,11 @@ class QueryObject(object):
         self.scheme = None
 
         self.convert_query_string_to_host()
-        self.get_NS()
-        self.get_MX()
-        self.get_A()
-        self.get_AAAA()
-        self.get_PTR()
+        self.get_NS_records()
+        self.get_MX_records()
+        self.get_A_records()
+        self.get_AAAA_records()
+        self.get_PTR_records()
 
     def __repr__(self):
         result = self.repr_query_string()
@@ -82,12 +82,6 @@ class QueryObject(object):
 
         if self.domain == self.query_string:
             result += 'That is actually a domain. Well done!\n\n'
-        elif self.domain == self.hostname:
-            result += (
-                'That\'s actually a hostname rather than a domain. '
-                'As far as I can tell the domain that matches '
-                'is {0}\n'.format(self.hostname)
-            )
         elif self.scheme is not None:
             result += '\n'.join(
                 textwrap.wrap(
@@ -100,6 +94,14 @@ class QueryObject(object):
                     break_on_hyphens=False
                 )
             )
+        elif self.domain == self.hostname:
+            result += (
+                'That\'s actually a hostname rather than a domain. '
+                'As far as I can tell the domain that matches '
+                'is {0}\n'.format(self.hostname)
+            )
+
+        return result
 
     def repr_nameservers(self):
         result = '\n  Nameservers:\n'
@@ -118,6 +120,8 @@ class QueryObject(object):
         for ns in self.nameservers:
             result += '    ' + ns.to_text() + '\n'
 
+        return result
+
     def convert_query_string_to_host(self):
         url = urlparse(self.query_string)
 
@@ -129,9 +133,12 @@ class QueryObject(object):
         else:
             self.hostname = url.path
 
+        self.find_domain()
+        self.get_NS_records()
+
+    def find_domain(self):
         try:
-            answer = dns.resolver.query(self.hostname, 'NS')
-            if answer:
+            if dns.resolver.query(self.hostname, 'NS'):
                 self.domain = self.hostname
         except dns.resolver.NXDOMAIN:
             print('{host} is not a valid hostname'.format(host=self.hostname))
@@ -139,29 +146,24 @@ class QueryObject(object):
         except dns.resolver.NoAnswer:
             try:
                 parent = dns.name.from_text(self.hostname).parent().to_text()
-                answer = dns.resolver.query(
-                    parent, 'NS'
-                )
-                if answer:
+                if dns.resolver.query(parent, 'NS'):
                     self.domain = parent
             except ValueError:
                 pass
 
-        self.get_NS()
-
-    def get_NS(self):
+    def get_NS_records(self):
         self.nameservers = dns.resolver.query(self.domain, 'NS')
 
-    def get_MX(self):
+    def get_MX_records(self):
         pass
 
-    def get_A(self):
+    def get_A_records(self):
         pass
 
-    def get_AAAA(self):
+    def get_AAAA_records(self):
         pass
 
-    def get_PTR(self):
+    def get_PTR_records(self):
         pass
 
     def get_details_as_text(self):
