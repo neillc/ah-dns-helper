@@ -37,7 +37,7 @@ setup(
     ],
     keywords='dns information about a domain',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    install_requires=['dns'],
+    install_requires=['dnspython3'],
     python_requires='>=3',
     extras_require={
         'dev': ['check-manifest'],
@@ -48,7 +48,7 @@ setup(
     #},
     entry_points={
         'console_scripts': [
-            'ah_dns_info=ah_dns_info:main',
+            'ah_dns_helper=ah_dns_helper:main',
         ],
     },
 )
