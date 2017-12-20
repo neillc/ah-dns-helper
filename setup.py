@@ -43,9 +43,6 @@ setup(
         'dev': ['check-manifest'],
         'test': ['coverage', 'pytest'],
     },
-    #package_data={  # Optional
-    #    'sample': ['package_data.dat'],
-    #},
     entry_points={
         'console_scripts': [
             'ah_dns_helper=ah_dns_helper:main',
