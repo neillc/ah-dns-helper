@@ -101,6 +101,8 @@ class QueryObject(object):
                 )
             )
 
+        return result
+
     def repr_nameservers(self):
         result = '\n  Nameservers:\n'
         if self.nameservers:
@@ -117,6 +119,8 @@ class QueryObject(object):
 
         for ns in self.nameservers:
             result += '    ' + ns.to_text() + '\n'
+
+        return result
 
     def convert_query_string_to_host(self):
         url = urlparse(self.query_string)
