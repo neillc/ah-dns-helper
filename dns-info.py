@@ -144,8 +144,6 @@ class QueryObject(object):
                 )
                 if answer:
                     self.domain = parent
-            except ValueError:
-                pass
 
         self.get_NS()
 
