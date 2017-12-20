@@ -134,8 +134,7 @@ class QueryObject(object):
 
     def find_domain(self):
         try:
-            answer = dns.resolver.query(self.hostname, 'NS')
-            if answer:
+            if dns.resolver.query(self.hostname, 'NS'):
                 self.domain = self.hostname
         except dns.resolver.NXDOMAIN:
             print('{host} is not a valid hostname'.format(host=self.hostname))
@@ -143,10 +142,7 @@ class QueryObject(object):
         except dns.resolver.NoAnswer:
             try:
                 parent = dns.name.from_text(self.hostname).parent().to_text()
-                answer = dns.resolver.query(
-                    parent, 'NS'
-                )
-                if answer:
+                if dns.resolver.query(parent, 'NS'):
                     self.domain = parent
             except ValueError:
                 pass
